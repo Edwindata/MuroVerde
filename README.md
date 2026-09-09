@@ -1,4 +1,4 @@
-# Muro Verde OS — IPN
+# MuroVerde OS
 
 Sistema de riego inteligente basado en sistemas embebidos y movimiento cartesiano. Este repositorio reúne el servidor maestro de la Raspberry Pi 5, su interfaz web y la documentación del respaldo.
 
