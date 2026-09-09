@@ -1,8 +1,8 @@
 # Muro Verde OS — IPN
 
-Sistema de riego inteligente basado en sistemas embebidos y movimiento cartesiano. Este repositorio reúne el servidor maestro de la Raspberry Pi 5, su interfaz web y la documentación del respaldo proporcionado por el autor.
+Sistema de riego inteligente basado en sistemas embebidos y movimiento cartesiano. Este repositorio reúne el servidor maestro de la Raspberry Pi 5, su interfaz web y la documentación del respaldo.
 
-La versión principal es **Master_Control_V2.py**. El alcance del código recibido es el control de movimiento CNC y la consulta del estado del equipo; el respaldo no incluye firmware de la Pico, esquemas eléctricos ni control de válvulas o bombas.
+La versión principal es **Master_Control_V2.py**. Control de movimiento CNC y la consulta del estado del equipo; el respaldo no incluye firmware de la Pico, esquemas eléctricos ni control de válvulas o bombas.
 
 ## Funcionamiento
 
@@ -80,8 +80,6 @@ Abre `http://<IP-DE-LA-PI>:5000` desde la misma red. El acceso incluido en el re
 
 ## Estado de esta integración
 
-Los archivos Python, HTML, CSS y PNG se conservan sin cambios de contenido. Se organiza el respaldo y se añade documentación; no se afirma haber probado movimiento, riego ni conexiones físicas. El botón para cambiar Wi-Fi sigue en desarrollo y el modo denominado «Simulación» en V2 no simula desplazamientos.
+Los archivos Python, HTML, CSS y PNG se conservan sin cambios de contenido. Se organiza el respaldo y se añade documentación. El botón para cambiar Wi-Fi sigue en desarrollo y el modo denominado «Simulación» en V2 no simula desplazamientos.
 
 El acceso y la clave de sesión están fijos en el código recibido, y `/api/estado` no exige sesión. La aplicación está planteada para una red local controlada; antes de publicarla en Internet se necesita revisar la autenticación y el despliegue.
-
-No se añade una licencia de distribución: su elección corresponde al autor.
