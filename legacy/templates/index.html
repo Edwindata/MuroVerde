@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muro Verde - Panel de Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="card">
+        <h1>🌿 Muro Verde</h1>
+        
+        <p><strong>Red Actual:</strong> <span class="status">{{ current_ssid }}</span></p>
+        <p><strong>Dirección IP:</strong> <span class="status">{{ current_ip }}</span></p>
+        
+        <hr>
+        
+        <h3>Conectar a nueva red WiFi</h3>
+        <button onclick="scan()">1. Escanear Redes Disponibles</button>
+        <div id="networks" style="margin-top:10px; margin-bottom: 10px; max-height: 150px; overflow-y: auto;"></div>
+        
+        <input type="text" id="ssid" placeholder="Nombre de la red (SSID)">
+        <input type="password" id="pass" placeholder="Contraseña">
+        
+        <label style="font-size: 0.9em; display: block; margin-bottom: 15px; cursor: pointer;">
+            <input type="checkbox" onclick="togglePassword()" style="width: auto; margin-right: 5px;"> Mostrar contraseña
+        </label>
+
+        <button onclick="connect()">2. Conectar Sistema</button>
+        
+        <p id="feedback" style="font-weight: bold; margin-top: 15px;"></p>
+    </div>
+
+    <script>
+        // Nueva función para alternar la visibilidad de la contraseña
+        function togglePassword() {
+            const passField = document.getElementById("pass");
+            if (passField.type === "password") {
+                passField.type = "text";
+            } else {
+                passField.type = "password";
+            }
+        }
+
+        async function scan() {
+            const div = document.getElementById('networks');
+            div.innerHTML = "Buscando redes cercanas...";
+            const res = await fetch('/api/scan');
+            const data = await res.json();
+            
+            if(data.status === 'success') {
+                div.innerHTML = data.redes.map(r => 
+                    `<span class="network-item" onclick="document.getElementById('ssid').value='${r}'">📶 ${r}</span>`
+                ).join('');
+            } else {
+                div.innerHTML = "Error al escanear redes.";
+            }
+        }
+
+        async function connect() {
+            const s = document.getElementById('ssid').value;
+            const p = document.getElementById('pass').value;
+            
+            if(!s) {
+                alert("Por favor ingresa al menos el nombre de la red");
+                return;
+            }
+
+            document.getElementById('feedback').innerText = "Enviando credenciales... Si la conexión es exitosa, perderás acceso temporalmente mientras la Pi cambia de red.";
+            
+            await fetch('/api/connect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ssid: s, password: p})
+            });
+        }
+    </script>
+</body>
+</html>
