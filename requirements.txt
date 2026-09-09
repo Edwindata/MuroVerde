@@ -1,0 +1,4 @@
+# Dependencias directas del servidor maestro; el respaldo no declara versiones.
+# Alternativa a los paquetes de Raspberry Pi OS, para un entorno virtual.
+Flask
+pyserial

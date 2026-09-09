@@ -1,0 +1,21 @@
+# Datos propios de cada instalación
+/Master_Control/config_cnc.json
+/Master_Control/posicion_cnc.json
+/Master_Control/posicion_cnc.json.tmp
+
+# Python y entornos locales
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Archivos temporales, credenciales locales y respaldos
+*.swp
+*.swo
+*~
+*.log
+.env
+.env.*
+*.zip
+.DS_Store
+Thumbs.db
