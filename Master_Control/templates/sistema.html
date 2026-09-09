@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Sistema - Muro Verde</title>
+    <style>
+        :root { 
+            --bg-body: #e8f5e9; --bg-sidebar: #ffffff; --border-color: #c8e6c9;
+            --text-main: #333333; --accent-guinda: #621132; --accent-green: #2e7d32;
+            --accent-red: #d32f2f; --accent-blue: #1976d2;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 250px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.05); z-index: 10; }
+        .brand { padding: 20px; font-size: 18px; font-weight: bold; color: var(--accent-green); display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border-color); }
+        .nav-item { padding: 15px 20px; color: var(--text-main); cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; font-weight: 500; }
+        .nav-item.active { background-color: #e8f5e9; border-left: 4px solid var(--accent-green); color: var(--accent-green); }
+        .nav-item:hover:not(.active) { background-color: #f5f5f5; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        
+        .header-title { font-size: 24px; font-weight: bold; color: var(--accent-green); margin-bottom: 10px; }
+        
+        /* Nuevo Badge de Uptime */
+        .uptime-badge { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 20px; padding: 8px 20px; font-size: 14px; font-weight: bold; color: #555; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .uptime-badge span { color: var(--accent-green); }
+
+        .grid-telemetria { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; width: 100%; max-width: 850px; }
+        .card { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: bold; color: #555; text-transform: uppercase; font-size: 14px; }
+        .card-value { font-size: 36px; font-weight: bold; color: var(--accent-green); margin-bottom: 10px; }
+        .card-subtitle { font-size: 12px; color: #888; }
+        .progress-bg { background: #e0e0e0; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 15px; }
+        .progress-bar { height: 100%; border-radius: 6px; transition: width 0.5s ease-in-out, background-color 0.3s; }
+        .mini-progress-bg { background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .mini-progress-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease-in-out, background-color 0.3s; }
+        .cpu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 20px; margin-top: 10px; }
+        .cpu-core { font-size: 13px; font-weight: bold; color: #555; display: flex; justify-content: space-between; }
+        .bar-green { background-color: #4caf50; }
+        .bar-orange { background-color: #ff9800; }
+        .bar-red { background-color: #f44336; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><img src="/logo.png" width="40" alt="IPN">Muro Verde OS</div>
+        <div class="nav-item" onclick="window.location.href='/panel'">Dashboard Riego</div>
+        <div class="nav-item" onclick="window.location.href='/red_wifi'">Configuración Wi-Fi</div>
+        <div class="nav-item active">Estado del Sistema</div>
+        <div class="nav-item" onclick="window.location.href='/logout'" style="color: var(--accent-red); margin-top: auto;">Cerrar Sesión</div>
+    </aside>
+    <main class="main-content">
+        <div class="header-title">Telemetría Raspberry Pi 5</div>
+        
+        <div class="uptime-badge">⏱️ Tiempo de Actividad: <span id="val-uptime">--</span></div>
+
+        <div class="grid-telemetria">
+            <div class="card">
+                <div class="card-header"><span>🌡️ Temperatura SoC</span></div>
+                <div class="card-value" id="val-temp">-- °C</div>
+                <div class="card-subtitle">Límite térmico: 85°C</div>
+                <div class="progress-bg"><div class="progress-bar bar-green" id="bar-temp" style="width: 0%;"></div></div>
+            </div>
+            <div class="card">
+                <div class="card-header"><span>⚙️ Carga Procesadores (ARM)</span></div>
+                <div class="cpu-grid">
+                    <div>
+                        <div class="cpu-core"><span>Core 0</span><span id="val-cpu0">--%</span></div>
+                        <div class="mini-progress-bg"><div class="mini-progress-bar bar-green" id="bar-cpu0" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="cpu-core"><span>Core 1</span><span id="val-cpu1">--%</span></div>
+                        <div class="mini-progress-bg"><div class="mini-progress-bar bar-green" id="bar-cpu1" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="cpu-core"><span>Core 2</span><span id="val-cpu2">--%</span></div>
+                        <div class="mini-progress-bg"><div class="mini-progress-bar bar-green" id="bar-cpu2" style="width: 0%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="cpu-core"><span>Core 3</span><span id="val-cpu3">--%</span></div>
+                        <div class="mini-progress-bg"><div class="mini-progress-bar bar-green" id="bar-cpu3" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><span>🧠 Memoria RAM</span></div>
+                <div class="card-value" id="val-ram">-- %</div>
+                <div class="card-subtitle" id="sub-ram">-- MB / -- MB</div>
+                <div class="progress-bg"><div class="progress-bar" style="background-color: var(--accent-blue); width: 0%;" id="bar-ram"></div></div>
+            </div>
+            <div class="card">
+                <div class="card-header"><span>💾 MicroSD (Root)</span></div>
+                <div class="card-value" id="val-disk">--</div>
+                <div class="card-subtitle" id="sub-disk">Usado: -- de --</div>
+                <div class="progress-bg"><div class="progress-bar bar-green" id="bar-disk" style="width: 0%;"></div></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function colorizarBarra(barraElement, porcentaje) {
+            barraElement.classList.remove('bar-green', 'bar-orange', 'bar-red');
+            if(porcentaje < 60) barraElement.classList.add('bar-green');
+            else if(porcentaje < 85) barraElement.classList.add('bar-orange');
+            else barraElement.classList.add('bar-red');
+        }
+        
+        function actualizarTelemetria() {
+            fetch('/api/telemetria').then(res => res.json()).then(data => {
+                
+                // Actualizar Uptime
+                document.getElementById('val-uptime').innerText = data.uptime;
+
+                document.getElementById('val-temp').innerText = data.temp + ' °C';
+                let tempPorc = (data.temp / 85) * 100;
+                let bTemp = document.getElementById('bar-temp');
+                bTemp.style.width = Math.min(tempPorc, 100) + '%';
+                colorizarBarra(bTemp, tempPorc);
+
+                if (data.cpu_loads && data.cpu_loads.length === 4) {
+                    for(let i=0; i<4; i++) {
+                        document.getElementById('val-cpu' + i).innerText = data.cpu_loads[i] + '%';
+                        let bCpu = document.getElementById('bar-cpu' + i);
+                        bCpu.style.width = data.cpu_loads[i] + '%';
+                        colorizarBarra(bCpu, data.cpu_loads[i]);
+                    }
+                }
+
+                document.getElementById('val-ram').innerText = data.ram_porc + ' %';
+                document.getElementById('sub-ram').innerText = data.ram_usada + ' MB / ' + data.ram_total + ' MB';
+                document.getElementById('bar-ram').style.width = data.ram_porc + '%';
+
+                document.getElementById('val-disk').innerText = data.disco_porc;
+                document.getElementById('sub-disk').innerText = 'Usado: ' + data.disco_usado + ' de ' + data.disco_total;
+                document.getElementById('bar-disk').style.width = data.disco_porc;
+            }).catch(e => console.log("Esperando datos..."));
+        }
+        setInterval(actualizarTelemetria, 2000);
+        actualizarTelemetria(); 
+    </script>
+</body>
+</html>

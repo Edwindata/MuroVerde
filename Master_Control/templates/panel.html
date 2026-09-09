@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración de Red - Muro Verde</title>
+    <style>
+        :root { 
+            --bg-body: #e8f5e9; 
+            --bg-sidebar: #ffffff;
+            --border-color: #c8e6c9;
+            --text-main: #333333;
+            --accent-guinda: #621132; 
+            --accent-green: #2e7d32;
+            --accent-red: #d32f2f;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+        .sidebar { width: 250px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.05); z-index: 10; }
+        .brand { padding: 20px; font-size: 18px; font-weight: bold; color: var(--accent-green); display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border-color); }
+        .nav-item { padding: 15px 20px; color: var(--text-main); cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; font-weight: 500; }
+        .nav-item.active { background-color: #e8f5e9; border-left: 4px solid var(--accent-green); color: var(--accent-green); }
+        .nav-item:hover:not(.active) { background-color: #f5f5f5; }
+
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
+        
+        .wifi-card { background-color: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 450px; padding: 40px; text-align: center; }
+        .wifi-card img { width: 80px; margin-bottom: 20px; }
+        .wifi-card h2 { margin-bottom: 30px; font-size: 24px; color: #000; }
+        
+        .info-box { background-color: #e8f5e9; padding: 25px; border-radius: 8px; margin-bottom: 30px; }
+        .info-box p { margin: 10px 0; font-size: 18px; font-weight: bold; }
+        
+        button { width: 100%; padding: 15px; border-radius: 8px; border: none; font-size: 16px; font-weight: 500; cursor: pointer; margin-bottom: 15px; transition: 0.2s; }
+        .btn-green { background-color: var(--accent-green); color: white; }
+        .btn-green:hover { background-color: #1b5e20; }
+        .btn-guinda { background-color: var(--accent-guinda); color: white; }
+        .btn-guinda:hover { background-color: #7a153f; }
+        .btn-gray { background-color: #dcdcdc; color: #333; }
+        .btn-gray:hover { background-color: #c0c0c0; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="/logo.png" width="40" alt="IPN">
+            Muro Verde OS
+        </div>
+        <div class="nav-item" onclick="window.location.href='/panel'">Dashboard Riego</div>
+        <div class="nav-item active">Configuración Wi-Fi</div>
+        <div class="nav-item" onclick="window.location.href='/sistema'">Estado del Sistema</div>
+        <div class="nav-item" onclick="window.location.href='/logout'" style="color: var(--accent-red); margin-top: auto;">Cerrar Sesión</div>
+    </aside>
+
+    <main class="main-content">
+        <div class="wifi-card">
+            <img src="/logo.png" alt="Logo IPN">
+            <h2>Panel de Control</h2>
+            
+            <div class="info-box">
+                <p>Red: <span style="font-weight: normal; color: var(--accent-green);">{{ ssid }}</span></p>
+                <p>IP: <span style="font-weight: normal; color: var(--accent-green);">{{ ip }}</span></p>
+            </div>
+            
+            <button class="btn-green" onclick="window.location.href='/panel'">⬅ Volver al Dashboard</button>
+            <button class="btn-guinda" onclick="alert('Función de escaneo de redes en desarrollo')">Cambiar Red Wi-Fi</button>
+            <button class="btn-gray" onclick="window.location.href='/logout'">Cerrar Sesión</button>
+        </div>
+    </main>
+
+</body>
+</html>
