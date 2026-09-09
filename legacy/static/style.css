@@ -1,0 +1,46 @@
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f4f7f6; 
+    color: #333; 
+    padding: 20px; 
+}
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    max-width: 500px; 
+    margin: auto; 
+}
+.status { 
+    font-weight: bold; 
+    color: #2c7a7b; 
+}
+button { 
+    background: #2c7a7b; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    margin-top: 5px;
+}
+button:hover {
+    background: #235f5f;
+}
+input { 
+    width: 90%; 
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+}
+.network-item {
+    display: block;
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+.network-item:hover {
+    background-color: #f0f0f0;
+}
